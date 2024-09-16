@@ -1,10 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const User = require("./models/User"); // Import the User model
 const cors = require("cors");
-const bcrypt = require("bcrypt"); // Import bcrypt
-const jwt = require("jsonwebtoken");
+
+const signupRoute = require("./routes/signup");
+const loginRoute = require("./routes/login");
 
 dotenv.config();
 
@@ -28,64 +28,14 @@ mongoose
 // Middleware to parse JSON
 app.use(express.json());
 
-// Example route
+// Base route
 app.get("/", (req, res) => {
   res.send("Hello from the Done&Dusted server!");
 });
 
-// Sign-Up Route
-app.post("/api/signup", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-
-    // Check if user already exists
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
-    }
-
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create a new user
-    const newUser = new User({ username, password: hashedPassword });
-    await newUser.save();
-
-    res.status(201).json({ message: "User created successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-// Log-In Route
-app.post("/api/login", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-
-    // Find the user
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(400).json({ message: "Invalid username or password" });
-    }
-
-    // Check the password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid username or password" });
-    }
-
-    // Generate JWT
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
-    res.status(200).json({ token });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
+// Routes
+app.use("/api/signup", signupRoute);
+app.use("/api/login", loginRoute);
 
 // Start the server
 app.listen(PORT, () => {
