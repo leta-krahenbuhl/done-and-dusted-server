@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const User = require("./models/User"); // Import the User model
 const cors = require("cors");
 const bcrypt = require("bcrypt"); // Import bcrypt
+const jwt = require("jsonwebtoken");
 
 dotenv.config();
 
@@ -52,6 +53,7 @@ app.post("/api/signup", async (req, res) => {
 
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -80,6 +82,7 @@ app.post("/api/login", async (req, res) => {
 
     res.status(200).json({ token });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 });
