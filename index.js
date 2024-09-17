@@ -5,6 +5,7 @@ const cors = require("cors");
 
 const signupRoute = require("./routes/signup");
 const loginRoute = require("./routes/login");
+const addHomeRoute = require("./routes/home");
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/api/signup", signupRoute);
 app.use("/api/login", loginRoute);
+app.use("/api/add-home", addHomeRoute);
 
 // Start the server
 app.listen(PORT, () => {
