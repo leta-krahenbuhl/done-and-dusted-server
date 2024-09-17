@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/Home"); // Import Home model
+const Home = require("../models/Home"); // Import Home model
 
 router.use(express.json());
 
