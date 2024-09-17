@@ -37,7 +37,7 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/api/signup", signupRoute);
 app.use("/api/login", loginRoute);
-app.use("/api/add-home", addHomeRoute);
+app.use("/api/homes", addHomeRoute);
 
 // Start the server
 app.listen(PORT, () => {
