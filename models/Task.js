@@ -9,6 +9,8 @@ const taskSchema = new Schema({
   done: { type: Boolean, required: true },
   doneBy: { type: String },
   homeName: { type: String, required: true },
+  dueDate: { type: String, required: true },
+  week: { type: String, required: true },
 });
 
 module.exports = mongoose.model("Task", taskSchema);
