@@ -43,13 +43,31 @@ router.post("/", async (req, res) => {
 // Get tasks of home for this week with repeat 'daily'
 router.get("/daily", async (req, res) => {
   const { homeName, currentWeekISO } = req.query; // Get parameters from query string
-  console.log("currentWeekISO: ", currentWeekISO);
 
   try {
     // Find tasks with the specified homeName and repeat set to 'daily'
     const tasks = await Task.find({
       homeName: homeName,
       repeat: "daily",
+      week: currentWeekISO, // Is this right?
+    });
+
+    res.json(tasks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Get tasks of home for this week with repeat 'weekly'
+router.get("/weekly", async (req, res) => {
+  const { homeName, currentWeekISO } = req.query; // Get parameters from query string
+
+  try {
+    // Find tasks with the specified homeName and repeat set to 'daily'
+    const tasks = await Task.find({
+      homeName: homeName,
+      repeat: "weekly",
       week: currentWeekISO, // Is this right?
     });
 
