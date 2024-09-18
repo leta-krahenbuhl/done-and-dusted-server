@@ -42,15 +42,15 @@ router.post("/", async (req, res) => {
 
 // Get tasks of home for this week with repeat 'daily'
 router.get("/daily", async (req, res) => {
-  const { homeName, currentWeekStart } = req.query; // Get parameters from query string
-  console.log("currentWeekStart", currentWeekStart);
+  const { homeName, currentWeekISO } = req.query; // Get parameters from query string
+  console.log("currentWeekISO: ", currentWeekISO);
 
   try {
     // Find tasks with the specified homeName and repeat set to 'daily'
     const tasks = await Task.find({
       homeName: homeName,
       repeat: "daily",
-      week: currentWeekStart, // Is this right?
+      week: currentWeekISO, // Is this right?
     });
 
     res.json(tasks);
