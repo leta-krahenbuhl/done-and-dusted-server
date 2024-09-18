@@ -31,8 +31,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Get tasks of home for this week with repeat 'daily'
-router.get("/daily", async (req, res) => {
+// Get tasks of home for this week with repeat 'daily' and done: false
+router.get("/daily-undone", async (req, res) => {
   const { homeName, currentWeekISO } = req.query; // Get parameters from query string
 
   try {
@@ -41,6 +41,7 @@ router.get("/daily", async (req, res) => {
       homeName: homeName,
       repeat: "daily",
       week: currentWeekISO,
+      done: false,
     });
 
     res.json(tasks);
@@ -74,7 +75,7 @@ router.get("/other", async (req, res) => {
   const { homeName, currentWeekISO } = req.query; // Get parameters from query string
 
   try {
-    // Find tasks with the specified homeName and repeat set to 'daily'
+    // Find tasks with the specified homeName and repeat set to 'other'
     const tasks = await Task.find({
       homeName: homeName,
       repeat: "other",

@@ -7,6 +7,7 @@ const signupRoute = require("./routes/signup");
 const loginRoute = require("./routes/login");
 const addHomeRoute = require("./routes/home");
 const addTaskRoute = require("./routes/tasks");
+const addUserRoute = require("./routes/users");
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ app.use("/api/signup", signupRoute);
 app.use("/api/login", loginRoute);
 app.use("/api/homes", addHomeRoute);
 app.use("/api/tasks", addTaskRoute);
+app.use("/api/users", addUserRoute);
 
 // Start the server
 app.listen(PORT, () => {
