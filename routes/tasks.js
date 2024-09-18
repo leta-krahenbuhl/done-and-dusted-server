@@ -9,22 +9,13 @@ dotenv.config();
 // Add Task Route
 router.post("/", async (req, res) => {
   try {
-    const {
-      taskName,
-      minutes,
-      dateCreated,
-      repeat,
-      done,
-      homeName,
-      dueDate,
-      week,
-    } = req.body;
+    const { taskName, minutes, repeat, done, homeName, dueDate, week } =
+      req.body;
 
     // create a new task
     const newTask = new Task({
       taskName,
       minutes,
-      dateCreated,
       repeat,
       done,
       homeName,
@@ -49,7 +40,7 @@ router.get("/daily", async (req, res) => {
     const tasks = await Task.find({
       homeName: homeName,
       repeat: "daily",
-      week: currentWeekISO, // Is this right?
+      week: currentWeekISO,
     });
 
     res.json(tasks);
@@ -68,7 +59,26 @@ router.get("/weekly", async (req, res) => {
     const tasks = await Task.find({
       homeName: homeName,
       repeat: "weekly",
-      week: currentWeekISO, // Is this right?
+      week: currentWeekISO,
+    });
+
+    res.json(tasks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Get tasks of home for this week with repeat 'other'
+router.get("/other", async (req, res) => {
+  const { homeName, currentWeekISO } = req.query; // Get parameters from query string
+
+  try {
+    // Find tasks with the specified homeName and repeat set to 'daily'
+    const tasks = await Task.find({
+      homeName: homeName,
+      repeat: "other",
+      week: currentWeekISO,
     });
 
     res.json(tasks);
