@@ -101,4 +101,37 @@ router.patch("/add-habitant", async (req, res) => {
   }
 });
 
+// Delete habitant from home
+router.patch("/delete-habitant", async (req, res) => {
+  try {
+    const { habitantToDelete, homeName } = req.body;
+    console.log("habitantToDelete: ", habitantToDelete);
+    console.log("homeName: ", homeName);
+
+    // Find the home by homeName and delete the habitantToDelete from the habitants array
+    const updatedHome = await Home.findOneAndUpdate(
+      { homeName: homeName }, // Find the home by homeName
+      { $pull: { habitants: habitantToDelete } }, // Remove the habitantToDelete from habitants array
+      { new: true } // Return the updated document
+    );
+
+    // if something goes wrong
+    if (!updatedHome) {
+      return res
+        .status(404)
+        .json({
+          message: `${habitantToDelete} could not be deleted from ${homeName}.`,
+        });
+    }
+
+    res.status(200).json({
+      message: `Habitant ${habitantToDelete} deleted successfully.`,
+      home: updatedHome, // Return the updated home object
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 module.exports = router;
