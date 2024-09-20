@@ -72,4 +72,33 @@ router.get("/get-current", async (req, res) => {
   }
 });
 
+// Add habitant to home
+router.patch("/add-habitant", async (req, res) => {
+  try {
+    const { newHabitant, homeName } = req.body;
+    console.log("newHabitant: ", newHabitant);
+    console.log("homeName: ", homeName);
+
+    // Find the home by homeName and push the newHabitant into the habitants array
+    const updatedHome = await Home.findOneAndUpdate(
+      { homeName: homeName }, // Find the home by homeName
+      { $push: { habitants: newHabitant } }, // Push newHabitant into the habitants array
+      { new: true } // Return the updated document
+    );
+
+    // If homeName is not found
+    if (!homeName) {
+      return res.status(404).json({ message: `${homeName} not found` });
+    }
+
+    res.status(200).json({
+      message: `Habitant ${newHabitant} added successfully.`,
+      home: updatedHome, // Return the updated home object
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 module.exports = router;
