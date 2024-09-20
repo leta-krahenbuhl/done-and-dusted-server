@@ -9,7 +9,7 @@ dotenv.config();
 // Add task
 router.post("/", async (req, res) => {
   try {
-    const { taskName, minutes, repeat, done, homeName, dueDate, week } =
+    const { taskName, minutes, repeat, done, homeName, dueDate, week, doneBy } =
       req.body;
 
     // create a new task
@@ -21,6 +21,7 @@ router.post("/", async (req, res) => {
       homeName,
       dueDate,
       week,
+      doneBy,
     });
     await newTask.save();
 
@@ -60,13 +61,14 @@ router.delete("/delete", async (req, res) => {
 // Update the done attribute
 router.patch("/update-done", async (req, res) => {
   try {
-    const { done, taskId } = req.body;
+    const { done, taskId, doneBy } = req.body;
 
     // Find the task by ID and update it
     const updatedTask = await Task.findByIdAndUpdate(
       taskId,
       {
         done,
+        doneBy,
       },
       { new: true, runValidators: true } // Return the updated task and run validations
     );
