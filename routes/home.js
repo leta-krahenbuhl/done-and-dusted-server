@@ -52,4 +52,24 @@ router.get("/user-home", async (req, res) => {
   }
 });
 
+// Get home object by homeName
+router.get("/get-current", async (req, res) => {
+  try {
+    const { homeName } = req.query; // Use req.query for GET request parameters
+    console.log("homeName: ", homeName);
+
+    // Find a home where the homeName matches
+    const home = await Home.findOne({ homeName: homeName });
+
+    if (home) {
+      return res.json(home);
+    } else {
+      return res.status(404).json({ message: `Home ${homeName} not found.` });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
 module.exports = router;
