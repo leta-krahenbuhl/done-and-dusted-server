@@ -5,11 +5,11 @@ const User = require("../models/User"); // Import User model
 router.use(express.json());
 
 // Get user
-router.get("/colour", async (req, res) => {
+router.get("/get-one", async (req, res) => {
   const { username } = req.query; // Get parameters from query string
 
   try {
-    // Find tasks with the specified homeName and repeat set to 'daily'
+    // Find user with username
     const user = await User.find({
       username: username,
     });
