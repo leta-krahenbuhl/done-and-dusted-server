@@ -7,7 +7,7 @@ router.use(express.json());
 dotenv.config();
 
 // Add task
-router.post("/", async (req, res) => {
+router.post("/add-one", async (req, res) => {
   try {
     const { taskName, minutes, repeat, done, homeName, dueDate, week, doneBy } =
       req.body;
@@ -36,7 +36,6 @@ router.post("/", async (req, res) => {
 router.delete("/delete", async (req, res) => {
   try {
     const { taskId } = req.body;
-    console.log("taskId backend: ", taskId);
 
     // Find and delete the task by ID
     const deletedTask = await Task.deleteOne({ _id: taskId });
