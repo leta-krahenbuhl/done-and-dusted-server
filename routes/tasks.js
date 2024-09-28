@@ -89,7 +89,7 @@ router.patch("/update-done", async (req, res) => {
   }
 });
 
-// Edit a task route
+// Edit a task
 router.patch("/edit", async (req, res) => {
   try {
     const { taskName, minutes, repeat, dueDate, taskId } = req.body;
@@ -164,16 +164,37 @@ router.get("/daily-done", async (req, res) => {
   }
 });
 
-// Get tasks of home for this week with repeat 'weekly'
-router.get("/weekly", async (req, res) => {
+// Get asks of home for this week with repeat 'weekly' and done: false
+router.get("/weekly-undone", async (req, res) => {
   const { homeName, currentWeekISO } = req.query; // Get parameters from query string
 
   try {
-    // Find tasks with the specified homeName and repeat set to 'daily'
+    // Find tasks with the specified homeName and repeat set to 'weekly'
     const tasks = await Task.find({
       homeName: homeName,
       repeat: "weekly",
       week: currentWeekISO,
+      done: false,
+    });
+
+    res.json(tasks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Get asks of home for this week with repeat 'weekly' and done: true
+router.get("/weekly-done", async (req, res) => {
+  const { homeName, currentWeekISO } = req.query;
+
+  try {
+    // Find tasks with the specified homeName and repeat set to 'weekly' & done: true
+    const tasks = await Task.find({
+      homeName: homeName,
+      repeat: "weekly",
+      week: currentWeekISO,
+      done: true,
     });
 
     res.json(tasks);
@@ -193,6 +214,44 @@ router.get("/other", async (req, res) => {
       homeName: homeName,
       repeat: "other",
       week: currentWeekISO,
+    });
+
+    res.json(tasks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Get tasks of home for this week with repeat 'other' and done: false
+router.get("/other-undone", async (req, res) => {
+  const { homeName, currentWeekISO } = req.query;
+
+  try {
+    const tasks = await Task.find({
+      homeName: homeName,
+      repeat: "other",
+      week: currentWeekISO,
+      done: false,
+    });
+
+    res.json(tasks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Get tasks of home for this week with repeat 'other' and done: true
+router.get("/other-done", async (req, res) => {
+  const { homeName, currentWeekISO } = req.query;
+
+  try {
+    const tasks = await Task.find({
+      homeName: homeName,
+      repeat: "other",
+      week: currentWeekISO,
+      done: true,
     });
 
     res.json(tasks);

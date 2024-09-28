@@ -34,9 +34,8 @@ router.post("/", async (req, res) => {
 // Get home of user
 router.get("/user-home", async (req, res) => {
   try {
-    const token = req.headers.authorization.split(" ")[1]; // Extract token from Authorization header
-    const decoded = jwt.verify(token, JWT_SECRET); // Use your JWT secret to verify the token
-    const username = decoded.username;
+    const { username } = req.query; // Use req.query for GET request parameters
+    console.log("username server: ", username);
 
     // Find a home where the user is listed as a habitant
     const home = await Home.findOne({ habitants: username });
