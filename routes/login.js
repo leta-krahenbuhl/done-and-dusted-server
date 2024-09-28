@@ -10,6 +10,7 @@ router.use(express.json());
 router.post("/", async (req, res) => {
   try {
     const { username, password } = req.body;
+    console.log("username: ", username);
 
     // Find the user
     const user = await User.findOne({ username });
