@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User"); // Import User model
+const Task = require("../models/Task");
 
 router.use(express.json());
 
@@ -21,38 +22,25 @@ router.get("/get-one", async (req, res) => {
   }
 });
 
-// Update username or password
-// router.patch("/update", async (req, res) => {
-//   try {
-//     const { username, passwordNew, usernameNew } = req.body;
+// Get total minutes / week
+router.get("/minutes", async (req, res) => {
+  const { username, currentWeekISO } = req.query;
 
-//     console.log("username:", username);
-//     console.log("passwordNew:", passwordNew);
-//     console.log("usernameNew:", usernameNew);
+  // console.log("username: ", username); //works
+  // console.log("currentWeekISO: ", currentWeekISO); //works
 
-//     // Find the user by their current username
-//     const userToUpdate = await User.findOne({ username });
-//     if (!userToUpdate) {
-//       return res
-//         .status(404)
-//         .json({ message: `User with username ${username} not found` });
-//     }
+  try {
+    // Find tasks with doneBy = username && week = currentWeekISO
+    const tasks = await Task.find({
+      doneBy: username,
+      week: currentWeekISO,
+    });
 
-//     // Update fields if they are provided
-//     if (usernameNew) userToUpdate.username = usernameNew; // Update username if provided
-//     if (passwordNew) userToUpdate.password = passwordNew; // Update password if provided
-
-//     // Save the updated user
-//     const updatedUser = await userToUpdate.save();
-
-//     res.status(201).json({
-//       message: `User updated successfully`,
-//       user: updatedUser,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// });
+    res.json(tasks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 module.exports = router;
