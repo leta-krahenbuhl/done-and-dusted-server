@@ -35,7 +35,6 @@ router.post("/", async (req, res) => {
 router.get("/user-home", async (req, res) => {
   try {
     const { username } = req.query; // Use req.query for GET request parameters
-    console.log("username server: ", username);
 
     // Find a home where the user is listed as a habitant
     const home = await Home.findOne({ habitants: username });
@@ -43,7 +42,7 @@ router.get("/user-home", async (req, res) => {
     if (home) {
       return res.json({ homeName: home.homeName });
     } else {
-      return res.status(404).json({ message: "User is not part of any home." });
+      return res.json({ homeName: "" });
     }
   } catch (error) {
     console.error(error);
