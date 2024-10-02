@@ -43,4 +43,31 @@ router.get("/minutes", async (req, res) => {
   }
 });
 
+// Update user (just colour currently)
+router.patch("/update", async (req, res) => {
+  try {
+    const { username, colourNew } = req.body;
+
+    // Find the user by their current username
+    const userToUpdate = await User.findOne({ username });
+    if (!userToUpdate) {
+      return res
+        .status(404)
+        .json({ message: `User with username ${username} not found` });
+    }
+    // Update colour
+    if (colourNew) userToUpdate.colour = colourNew; // Update colour if provided
+
+    // Save the updated user
+    const updatedUser = await userToUpdate.save();
+    res.status(204).json({
+      message: `User updated successfully`,
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 module.exports = router;

@@ -261,4 +261,22 @@ router.get("/other-done", async (req, res) => {
   }
 });
 
+// Get tasks: all done tasks of a user for a certain week
+router.get("/done-by-user", async (req, res) => {
+  const { username, currentWeekISO } = req.query;
+
+  try {
+    const tasks = await Task.find({
+      doneBy: username,
+      week: currentWeekISO,
+      done: true,
+    });
+
+    res.json(tasks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error whilst getting tasks." });
+  }
+});
+
 module.exports = router;
