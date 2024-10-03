@@ -73,8 +73,6 @@ router.get("/get-current", async (req, res) => {
 router.patch("/add-habitant", async (req, res) => {
   try {
     const { newHabitant, homeName } = req.body;
-    console.log("newHabitant: ", newHabitant);
-    console.log("homeName: ", homeName);
 
     // Check if the newHabitant is already part of any home
     const existingHome = await Home.findOne({ habitants: newHabitant });

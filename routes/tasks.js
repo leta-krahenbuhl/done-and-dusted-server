@@ -47,7 +47,7 @@ router.delete("/delete", async (req, res) => {
         .json({ message: `Task with ID ${taskId} not found` });
     }
 
-    res.status(200).json({
+    res.status(204).json({
       message: `Task deleted successfully`,
       taskId: taskId,
     });

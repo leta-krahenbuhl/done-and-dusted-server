@@ -26,9 +26,6 @@ router.get("/get-one", async (req, res) => {
 router.get("/minutes", async (req, res) => {
   const { username, currentWeekISO } = req.query;
 
-  // console.log("username: ", username); //works
-  // console.log("currentWeekISO: ", currentWeekISO); //works
-
   try {
     // Find tasks with doneBy = username && week = currentWeekISO
     const tasks = await Task.find({
