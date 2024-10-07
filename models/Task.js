@@ -10,6 +10,8 @@ const taskSchema = new Schema({
   homeName: { type: String, required: true },
   dueDate: { type: String, required: true },
   week: { type: String, required: true },
+  startDate: { type: String, required: false },
+  endDate: { type: String, required: false },
 });
 
 module.exports = mongoose.model("Task", taskSchema);

@@ -9,8 +9,18 @@ dotenv.config();
 // Add task
 router.post("/add-one", async (req, res) => {
   try {
-    const { taskName, minutes, repeat, done, homeName, dueDate, week, doneBy } =
-      req.body;
+    const {
+      taskName,
+      minutes,
+      repeat,
+      done,
+      homeName,
+      dueDate,
+      week,
+      doneBy,
+      startDate,
+      endDate,
+    } = req.body;
 
     // create a new task
     const newTask = new Task({
@@ -22,6 +32,8 @@ router.post("/add-one", async (req, res) => {
       dueDate,
       week,
       doneBy,
+      startDate,
+      endDate,
     });
     await newTask.save();
 
