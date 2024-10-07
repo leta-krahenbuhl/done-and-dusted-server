@@ -24,10 +24,11 @@ router.post("/", async (req, res) => {
     }
 
     // Generate JWT
+    // Including the username in the token
     const token = jwt.sign(
-      { userId: user._id, username: user.username }, // Include the username in the token
+      { userId: user._id, username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "2h" }
     );
 
     res.status(200).json({ token });

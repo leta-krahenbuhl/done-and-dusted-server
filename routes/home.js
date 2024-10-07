@@ -108,7 +108,7 @@ router.patch("/add-habitant", async (req, res) => {
 // Delete habitant from home
 router.patch("/delete-habitant", async (req, res) => {
   try {
-    const { habitantToDelete, homeName } = req.body;
+    const { username, homeName } = req.body;
 
     // Find the home by homeName
     const home = await Home.findOne({ homeName: homeName });
@@ -119,28 +119,28 @@ router.patch("/delete-habitant", async (req, res) => {
     }
 
     // Check if there is only one habitant left
-    if (home.habitants.length === 1 && home.habitants[0] === habitantToDelete) {
-      return res.status(400).json({
-        message: `Cannot delete the last habitant (${habitantToDelete}) from ${homeName}. If you would like to remove yourself from this home, please go to your account and edit it there.`,
-      });
-    }
+    // if (home.habitants.length === 1 && home.habitants[0] === username) {
+    //   return res.status(400).json({
+    //     message: `Cannot delete the last habitant (${username}) from ${homeName}. If you would like to remove yourself from this home, please go to your account and edit it there.`,
+    //   });
+    // }
 
     // Proceed to delete the habitant
     const updatedHome = await Home.findOneAndUpdate(
       { homeName: homeName }, // Find the home by homeName
-      { $pull: { habitants: habitantToDelete } }, // Remove the habitantToDelete from habitants array
+      { $pull: { habitants: username } }, // Remove the habitnat with username from habitants array
       { new: true } // Return the updated document
     );
 
     // If deletion was not successful
     if (!updatedHome) {
       return res.status(404).json({
-        message: `${habitantToDelete} could not be deleted from ${homeName}.`,
+        message: `${username} could not be deleted from ${homeName}.`,
       });
     }
 
     res.status(200).json({
-      message: `Habitant ${habitantToDelete} deleted successfully.`,
+      message: `Habitant ${username} deleted successfully.`,
       home: updatedHome, // Return the updated home object
     });
   } catch (error) {
