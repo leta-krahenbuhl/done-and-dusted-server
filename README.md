@@ -4,8 +4,9 @@
 
 ### Tech Stack
 
-<!-- - HTML, CSS, SASS/BEM, JavaScript, React JS, Node/Express server
-- Use of MySQL database with knex.js -->
+- HTML (with BEM), CSS (with SASS), JavaScript, React JS, Node.js / Express server
+- MonboDB Atlas database
+- Deployed with Microsoft Azure
 
 ### Features
 
