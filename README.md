@@ -10,10 +10,10 @@
 
 ### Features
 
-<!-- - edit/add/delete notebooks, edit/add/delete lists, tick off list items
-- front and back-end form validation
-- any changes are immediately updated in the database
-- breadcrumb navigation  -->
+- Signup / Login
+- Create or join a house
+- Add daily, weekly or other tasks
+- View weekly stats for all habitants
 
 ### APIs
 
