@@ -1,13 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const Home = require("../models/Home"); // Import Home model
-const jwt = require("jsonwebtoken");
+const Task = require("../models/Task"); // Import Task model
+
+// const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 
 router.use(express.json());
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET;
+// const JWT_SECRET = process.env.JWT_SECRET;
 
 // Add Home Route
 router.post("/", async (req, res) => {
@@ -20,14 +22,14 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ message: "Home name already exists" });
     }
 
-    // create a new home
+    // Create a new home
     const newHome = new Home({ homeName, habitants, admins });
     await newHome.save();
 
     res.status(201).json({ message: "Home created successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error creating home:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -105,7 +107,7 @@ router.patch("/add-habitant", async (req, res) => {
   }
 });
 
-// Delete habitant from home
+// Delete habitant from home (and also delete all of this habitant's tasks)
 router.patch("/delete-habitant", async (req, res) => {
   try {
     const { username, homeName } = req.body;
@@ -117,13 +119,6 @@ router.patch("/delete-habitant", async (req, res) => {
     if (!home) {
       return res.status(404).json({ message: `${homeName} not found.` });
     }
-
-    // Check if there is only one habitant left
-    // if (home.habitants.length === 1 && home.habitants[0] === username) {
-    //   return res.status(400).json({
-    //     message: `Cannot delete the last habitant (${username}) from ${homeName}. If you would like to remove yourself from this home, please go to your account and edit it there.`,
-    //   });
-    // }
 
     // Proceed to delete the habitant
     const updatedHome = await Home.findOneAndUpdate(
@@ -139,9 +134,23 @@ router.patch("/delete-habitant", async (req, res) => {
       });
     }
 
+    // Find all tasks done by the habitant being removed
+    const tasksToDelete = await Task.find({ doneBy: username });
+
+    // Delete the tasks after finding them
+    await Task.deleteMany({ doneBy: username });
+
+    // Check if there is only one habitant left
+    // if (home.habitants.length === 1 && home.habitants[0] === username) {
+    //   return res.status(400).json({
+    //     message: `Cannot delete the last habitant (${username}) from ${homeName}. If you would like to remove yourself from this home, please go to your account and edit it there.`,
+    //   });
+    // }
+
     res.status(200).json({
       message: `Habitant ${username} deleted successfully.`,
       home: updatedHome, // Return the updated home object
+      deletedTasks: tasksToDelete, // Return the deleted tasks
     });
   } catch (error) {
     console.error(error);
