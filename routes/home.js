@@ -26,7 +26,9 @@ router.post("/", async (req, res) => {
     const newHome = new Home({ homeName, habitants, admins });
     await newHome.save();
 
-    res.status(201).json({ message: "Home created successfully" });
+    res
+      .status(201)
+      .json({ message: "Home created successfully", home: newHome });
   } catch (error) {
     console.error("Error creating home:", error);
     res.status(500).json({ message: "Internal server error" });
